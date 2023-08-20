@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URL Decoder</title>
+  <script>
+    function decodeUrl(encodedUrl) {
+      const regexMail = /https:\/\/deref-mail\.com\/mail\/client\/([a-zA-Z0-9-_]{11})\/dereferrer\/\?redirectUrl=(.+)/;
+      const regexGMX = /https:\/\/deref-gmx\.net\/mail\/client\/([a-zA-Z0-9-_]{11})\/dereferrer\/\?redirectUrl=(.+)/;
+      const matchMail = encodedUrl.match(regexMail);
+      const matchGMX = encodedUrl.match(regexGMX);
+
+      if (matchMail && matchMail[2]) {
+        const strippedUrl = matchMail[2];
+        const decodedUrl = decodeURIComponent(strippedUrl);
+        return decodedUrl;
+      }
+
+      if (matchGMX && matchGMX[2]) {
+        const strippedUrl = matchGMX[2];
+        const decodedUrl = decodeURIComponent(strippedUrl);
+        return decodedUrl;
+      }
+
+      return null;
+    }
+
+    function decodeUrlAndDisplay() {
+      const encodedUrl = document.getElementById('encoded-url').value;
+      const decodedUrlContainer = document.getElementById('decoded-url');
+
+      if (encodedUrl) {
+        const decodedUrl = decodeUrl(encodedUrl);
+        if (decodedUrl) {
+          decodedUrlContainer.innerHTML = `<a href="${decodedUrl}" target="_blank">${decodedUrl}</a>`;
+        } else {
+          decodedUrlContainer.textContent = 'Invalid encoded URL';
+        }
+      } else {
+        decodedUrlContainer.textContent = 'No encoded URL provided';
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>URL Decoder</h1>
+  <p>Enter an encoded URL:</p>
+  <input type="text" id="encoded-url" placeholder="Encoded URL">
+  <button onclick="decodeUrlAndDisplay()">Decode URL</button>
+  <p>Decoded URL:</p>
+  <p id="decoded-url"></p>
+</body>
+</html>
